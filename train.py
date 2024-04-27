@@ -20,7 +20,7 @@ def train_model(model, config, train_loader, val_loader, device='cpu', is_produc
 
     criterion = nn.CrossEntropyLoss()
     optimizer_class = getattr(optim, config['optimizer'])
-    optimizer = optimizer_class(model.parameters(), lr=config['lr'])
+    optimizer = optimizer_class(model.parameters(), lr=config['lr'], weight_decay=config['weight_decay'])
 
     model.train()
     train_losses, train_accuracies = [], []
