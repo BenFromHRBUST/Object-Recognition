@@ -7,16 +7,13 @@ from utils import check_device
 from config import config
 
 
-IS_PRODUCTION = True
-
-
 def main():
-    wandb.login(key=config['wandb']['api_key']) if IS_PRODUCTION else None
+    wandb.login(key=config['wandb']['api_key']) if config['production'] else None
 
     dataset = CIFAR100(config['cifar100'])
     train_loader, val_loader, test_loader = dataset.get_loader()
 
-    train(config, train_loader, val_loader, test_loader, is_production=IS_PRODUCTION)
+    train(config, train_loader, val_loader, test_loader, is_production=config['production'])
 
 
 if __name__ == '__main__':
