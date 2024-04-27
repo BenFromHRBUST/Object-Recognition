@@ -108,19 +108,20 @@ def test_model(model,config, test_loader, device='cpu', is_production=False):
 
 
 def train(config, train_loader, val_loader, test_loader, is_production=False):
-    wandb.init() if is_production else None
+    wandb.init(config['wandb']['project']) if is_production else None
 
     device = check_device()
 
-    model = config['model']().to(device)
+    model = config['train']['model']().to(device)
 
-    train_losses, train_accuracies, val_losses, val_accuracies = train_model(model, config,
+    train_losses, train_accuracies, val_losses, val_accuracies = train_model(model, config['train'],
                                                                              train_loader, val_loader,
                                                                              device=device,
                                                                              is_production=is_production)
 
     plot_curves(train_losses, train_accuracies, val_losses, val_accuracies,
-                title=f'{config["model"].__name__}-{config["optimizer"]}', path=config['fig_path'])
+                title=f'{config["train"]["model"].__name__}-{config["train"]["optimizer"]}',
+                path=config["train"]['fig_path'])
 
     cm = test_model(model,
                     config,
@@ -129,5 +130,5 @@ def train(config, train_loader, val_loader, test_loader, is_production=False):
                     is_production=is_production)
 
     draw_confusion_matrix(cm,
-                          title=f'ConfusionMatrix-{config["model"].__name__}-{config["optimizer"]}',
-                          path=config['fig_path'])
+                          title=f'ConfusionMatrix-{config["train"]["model"].__name__}-{config["train"]["optimizer"]}',
+                          path=config["train"]['fig_path'])
