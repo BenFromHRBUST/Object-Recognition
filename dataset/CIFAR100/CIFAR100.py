@@ -36,11 +36,11 @@ class CIFAR100:
         train_dataset = datasets.CIFAR100(root=self.config['root'],
                                           train=True,
                                           download=True,
-                                          transform=dataset_transform(self.config['datasets']['train']['augmentation']))
+                                          transform=dataset_transform(config=self.config['datasets']['train']['augmentation']))
         test_dataset = datasets.CIFAR100(root=self.config['root'],
                                          train=False,
                                          download=True,
-                                         transform=dataset_transform)
+                                         transform=dataset_transform())
         print("[!] Downloading and transforming CIFAR-100 dataset...DONE!")
 
         return train_dataset, test_dataset
