@@ -1,6 +1,6 @@
 import models
 
-config = {
+default_config = {
     'production': False,  # Set this to 'True' if you want to run the code in production mode
     'wandb': {
         'api_key': '',  # Your API key

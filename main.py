@@ -4,10 +4,15 @@ from dataset.CIFAR100 import CIFAR100
 
 from train import train
 from utils import check_device
-from config import config
+from config import default_config
 
 
 def main():
+    config = default_config
+
+    if config['wandb']['api_key'] == '':
+        config['production'] = False
+
     wandb.login(key=config['wandb']['api_key']) if config['production'] else None
 
     dataset = CIFAR100(config['cifar100'])
