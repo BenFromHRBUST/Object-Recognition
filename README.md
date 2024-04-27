@@ -54,4 +54,4 @@ This project uses [Git](https://git-scm.com/) for version management. You can se
 
 ### Copyright
 
-This project is licensed under the MIT license. For details, please see [LICENSE.txt](https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt)
+This project is licensed under the view-only license. For details, please see `LICENSE.md` in repository.
