@@ -40,7 +40,14 @@ def check_cpu_info():
     print(f'[!] CPU RAM: {virtual_memory().total / 1e9} GB')
 
 
+def check_path(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
 def plot_curves(train_losses, train_accuracies, val_losses, val_accuracies, title='Training Curves', path='./fig'):
+    check_path(path)
+
     has_val = len(val_losses) != 0 and len(val_accuracies) != 0
 
     plt.figure(figsize=(10, 5))
@@ -64,6 +71,8 @@ def plot_curves(train_losses, train_accuracies, val_losses, val_accuracies, titl
 
 
 def draw_confusion_matrix(cm, title='Confusion Matrix', path='./fig'):
+    check_path(path)
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=False, fmt="d", cmap='Blues')
     plt.xticks([])
