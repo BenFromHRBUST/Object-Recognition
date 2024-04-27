@@ -9,7 +9,7 @@ from config import (config_wandb,
                     config_cifar100)
 
 
-IS_PRODUCTION = False
+IS_PRODUCTION = True
 
 
 def main():
