@@ -1,21 +1,47 @@
 # Object Recognition
 
-TODO: ProjectName and Description
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 ## Contents
-
+- [introduction](#introduction)
+- [How to use](#How-to-use)
 - [Version Management](#version-management)
 - [Authors](#Authors)
 - [Copyright](#Copyright)
 
+### Introduction
+
+[//]: # (TODO: Write a project description)
+
+### How to use
+
+#### Download the project
+```bash
+git clone https://github.com/BenFromHRBUST/Object-Recognition.git
+```
+
+#### Install the dependencies (not available yet)
+
+[//]: # (TODO: add requirements.txt)
+
+```bash
+pip install -r requirements.txt
+```
+
+#### Configure the project
+To protect possible privacy settings, you need to create your own `config.py` file. You can copy the `config.template.py` file and rename it to `config.py`. Then you can configure the project according to your own needs.
+```bash
+# Copy the config.template.py file and rename it to config.py
+cp config.template.py config.py
+
+# Edit the config.py file using your favorite editor (e.g. vim)
+vim config.py
+```
+
+If you want to use wandb, you need to set the `api_key` in the config.py file. It will only be used when you set the `production` to True.
+
+#### Run the project
+```bash
+python main.py
+```
 
 ### version management
 
