@@ -1,4 +1,5 @@
-/dataset/CIFAR100/data
+tmp_dataset
+wandb
 
 config.py
 
