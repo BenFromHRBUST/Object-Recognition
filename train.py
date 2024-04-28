@@ -105,7 +105,7 @@ def test_model(model, train_config, test_loader, device='cpu', is_production=Fal
 
     accuracy = total_correct / total_images * 100
     wandb.log({"Test Accuracy": accuracy}) if is_production else None
-    print(f'Test Accuracy: {accuracy}%')
+    print(f'[!]Test Accuracy: {accuracy}%')
 
     print(f'[+] Testing {model.__class__.__name__}...DONE!')
 

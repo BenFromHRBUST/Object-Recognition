@@ -1,13 +1,16 @@
 # Object Recognition
 
 ## Contents
-- [introduction](#introduction)
+- [Introduction](#introduction)
 - [How to use](#How-to-use)
+- [How to fine tune the model](#How-to-fine-tune-the-model)
 - [Version Management](#version-management)
 - [Authors](#Authors)
 - [Copyright](#Copyright)
 
 ### Introduction
+
+*The introduction is on the way~*
 
 [//]: # (TODO: Write a project description)
 
@@ -18,7 +21,7 @@
 git clone https://github.com/BenFromHRBUST/Object-Recognition.git
 ```
 
-#### Install the dependencies (not available yet)
+#### Install the dependencies (not available yet, please install them manually)
 
 [//]: # (TODO: add requirements.txt)
 
@@ -42,6 +45,12 @@ If you want to use wandb, you need to set the `api_key` in the config.py file. I
 ```bash
 python main.py
 ```
+
+### How to fine tune the model
+
+*The guide is on the way~*
+
+[//]: # (TODO: Add description)
 
 ### version management
 
