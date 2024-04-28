@@ -9,11 +9,22 @@ from config import (default_program_config,
                     default_sweep_config)
 
 
-def sweep(train_config, dataset, is_production=False):
+def run_sweep(program_config, train_config, dataset_config, is_production=False):
     wandb.init() if is_production else None
 
+    model_name = program_config['model']
     for key, value in wandb.config.items():
-        train_config[key] = value
+        if key in train_config['general']:
+            train_config['general'] = value
+        elif key in train_config[model_name]:
+            train_config[model_name] = value
+
+    train(program_config['model'],
+          train_config['general'],
+          train_config[program_config['model']],
+          program_config['dataset'],
+          dataset_config[program_config['dataset']],
+          is_production=program_config['production'])
 
     wandb.finish() if is_production else None
 
@@ -23,12 +34,14 @@ def main():
     train_config = default_train_config
     dataset_config = default_dataset_config
 
-    if program_config['wandb']['api_key'] == '':
-        if program_config['mode'] == 'sweep':
-            raise ValueError("API key is required to run the code in sweep mode.")
-        else:
-            print("[!] API key is not provided. Running the code in develop mode...")
-            program_config['production'] = False
+    if program_config['wandb']['api_key'] == '' and program_config['mode'] == 'sweep':
+        raise ValueError("API key is required to run the code in sweep mode.")
+    elif program_config['wandb']['api_key'] == '' and program_config['production'] is True:
+        print("[!] API key is not provided. Running the code in develop mode...")
+        program_config['production'] = False
+    elif program_config['mode'] == 'sweep' and program_config['production'] is False:
+        print("[!] Production mode must be set to 'True' to run the code in sweep mode. Running the code in production mode...")
+        program_config['production'] = True
 
     wandb.login(key=program_config['wandb']['api_key']) if program_config['production'] else None
 
@@ -45,9 +58,9 @@ def main():
         sweep_config = default_sweep_config
         sweep_id = wandb.sweep(sweep_config['config'], project=program_config['wandb']['project'])
         wandb.agent(sweep_id,
-                    function=lambda: sweep(train_config,
-                                           program_config['dataset'],
-                                           is_production=program_config['production']),
+                    function=lambda: run_sweep(program_config,
+                                               train_config,
+                                               dataset_config),
                     count=sweep_config['count'])
 
 
