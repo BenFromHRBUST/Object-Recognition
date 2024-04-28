@@ -49,7 +49,7 @@ def main():
 
     if program_config['mode'] == 'train':
         print("[+] Using train mode...")
-        wandb.init(program_config['wandb']['project']) if program_config['production'] else None
+        wandb.init(project=program_config['wandb']['project']) if program_config['production'] else None
         train(program_config['model'],
               train_config['general'],
               train_config[program_config['model']],
