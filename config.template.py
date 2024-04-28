@@ -10,7 +10,7 @@ WANDB_ENTITY = 'bugmakerh'  # Your entity name. You can find it in the URL of yo
 default_program_config = {
     'production': True,  # [True, False]. Set this to 'True' if you want to run the code in production mode. But it must be 'True' when you run the code in sweep mode.
     'mode': 'sweep',    # ['train', 'sweep']. 'train' is for training a single model, and 'sweep' is for hyperparameter tuning.
-    'model': 'EnhancedCNN',  # ['SimpleCNN', 'EnhancedCNN', 'ImprovedCNN'].
+    'model': 'EnhancedCNN',  # ['SimpleCNN', 'EnhancedCNN', 'ImprovedCNN', 'InceptionLikeCNN'].
     'dataset': 'CIFAR100',  # ['CIFAR100']
     'wandb': {
         'api_key': WANDB_API_KEY,
