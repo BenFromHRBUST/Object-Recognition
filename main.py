@@ -48,6 +48,7 @@ def main():
     wandb.login(key=program_config['wandb']['api_key']) if program_config['production'] else None
 
     if program_config['mode'] == 'train':
+        print("[+] Using train mode...")
         wandb.init(program_config['wandb']['project']) if program_config['production'] else None
         train(program_config['model'],
               train_config['general'],
@@ -57,6 +58,7 @@ def main():
               is_production=program_config['production'])
         wandb.finish() if program_config['production'] else None
     elif program_config['mode'] == 'sweep':
+        print("[+] Using sweep mode...")
         sweep_config = default_sweep_config
         sweep_id = wandb.sweep(sweep_config['config'][program_config['model']],
                                project=program_config['wandb']['project'],
