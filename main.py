@@ -56,7 +56,8 @@ def main():
         wandb.finish() if program_config['production'] else None
     elif program_config['mode'] == 'sweep':
         sweep_config = default_sweep_config
-        sweep_id = wandb.sweep(sweep_config['config'], project=program_config['wandb']['project'])
+        sweep_id = wandb.sweep(sweep_config['config'][program_config['model']],
+                               project=program_config['wandb']['project'])
         wandb.agent(sweep_id,
                     function=lambda: run_sweep(program_config,
                                                train_config,
