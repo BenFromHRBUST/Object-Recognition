@@ -17,12 +17,12 @@ from utils import (check_device,
 
 def train_model(model, train_general_config, train_loader, val_loader, device='cpu', is_production=False):
     print(
-        f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_config["epochs"]} epochs...')
+        f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_general_config["epochs"]} epochs...')
     print(f'[+] Model Architecture: {model}')
 
     criterion = nn.CrossEntropyLoss()
     optimizer_class = getattr(optim, train_general_config['optimizer'])
-    optimizer = optimizer_class(model.parameters(), lr=train_general_config['learning_rate'], weight_decay=train_config['weight_decay'])
+    optimizer = optimizer_class(model.parameters(), lr=train_general_config['learning_rate'], weight_decay=train_general_config['weight_decay'])
 
     model.train()
     train_losses, train_accuracies = [], []
@@ -77,7 +77,7 @@ def train_model(model, train_general_config, train_loader, val_loader, device='c
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy}) if is_production else None
             print(f'\rEpoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
 
-    print(f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_config["epochs"]} epochs...DONE!')
+    print(f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_general_config["epochs"]} epochs...DONE!')
     return train_losses, train_accuracies, val_losses, val_accuracies
 
 
