@@ -74,11 +74,13 @@ def train_model(model, train_general_config, train_loader, val_loader, device='c
 
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy, "val_loss": val_loss,
                        "val_accuracy": val_accuracy}) if is_production else None
+            print('\r', end='')
             print(
-                f'\rEpoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%, Val Loss: {val_loss:.5f}, Val Accuracy: {val_accuracy:.5f}%')
+                f'Epoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%, Val Loss: {val_loss:.5f}, Val Accuracy: {val_accuracy:.5f}%')
         else:
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy}) if is_production else None
-            print(f'\rEpoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
+            print('\r', end='')
+            print(f'Epoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
 
     print(f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_general_config["epochs"]} epochs...DONE!')
     return train_losses, train_accuracies, val_losses, val_accuracies
