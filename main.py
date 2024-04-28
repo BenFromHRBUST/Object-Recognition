@@ -14,7 +14,7 @@ def run_sweep(program_config, train_config, dataset_config, is_production=False)
 
     model_name = program_config['model']
     for key, value in wandb.config.items():
-        if key in train_config['general']:
+        if key in train_config['general'].keys():
             train_config['general'] = value
         elif key in train_config[model_name]:
             train_config[model_name] = value
