@@ -1,26 +1,33 @@
-API_KEY = ''    # Your API key
+WANDB_API_KEY = ''    # Your API key
+WANDB_ENTITY = 'bugmakerh'  # Your entity name
 
 default_program_config = {
-    'production': False,  # Set this to 'True' if you want to run the code in production mode
-    'mode': 'train',    # 'train' or 'sweep'
+    'production': True,  # Set this to 'True' if you want to run the code in production mode
+    'mode': 'sweep',    # 'train' or 'sweep'
     'model': 'SimpleCNN',  # 'SimpleCNN'
     'dataset': 'CIFAR100',  # 'CIFAR100'
     'wandb': {
-        'api_key': API_KEY,
-        'project': 'test',
+        'api_key': WANDB_API_KEY,
+        'project': 'SimpleCNN',
+        'entity': WANDB_ENTITY,
     },
 }
 
-
 default_train_config = {
-    'SimpleCNN': {
-        'optimizer': 'Adam',
+    'general': {
         'epochs': 100,
-        'batch_size': 64,
+        'optimizer': 'Adam',
+        'batch_size': 256,
         'learning_rate': 0.001,
-        'dropout_rate': 0.5,
         'weight_decay': 0.001,
         'fig_path': './fig',
+    },
+    'SimpleCNN': {
+        'activation_function': 'LeakyReLU',
+    },
+    'ImprovedCNN': {
+        'dropout_rate': 0.5,
+        'activation_function': 'LeakyReLU',
     },
 }
 
@@ -67,7 +74,7 @@ default_sweep_config = {
                     'values': [64, 128, 256]
                 },
                 'epochs': {
-                    'value': 10
+                    'value': 100
                 },
                 'optimizer': {
                     'values': ['Adam', 'SGD']

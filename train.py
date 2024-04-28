@@ -21,7 +21,9 @@ def train_model(model, train_general_config, train_loader, val_loader, device='c
 
     criterion = nn.CrossEntropyLoss()
     optimizer_class = getattr(optim, train_general_config['optimizer'])
-    optimizer = optimizer_class(model.parameters(), lr=train_general_config['learning_rate'], weight_decay=train_general_config['weight_decay'])
+    optimizer = optimizer_class(model.parameters(),
+                                lr=train_general_config['learning_rate'],
+                                weight_decay=train_general_config['weight_decay'])
 
     print(f'[+] Model Architecture: {model}')
     print(f'[+] Optimizer: {optimizer}')
