@@ -125,7 +125,7 @@ def train(model_name, train_config, dataset_name, dataset_config, is_production=
                                                                              is_production=is_production)
 
     plot_curves(train_losses, train_accuracies, val_losses, val_accuracies,
-                title=f'{train_config["train"]["model"].__name__}-{train_config["train"]["optimizer"]}',
+                title=f'{model_name}-{train_config["train"]["optimizer"]}',
                 path=train_config["train"]['fig_path'])
 
     cm = test_model(model,
@@ -135,5 +135,5 @@ def train(model_name, train_config, dataset_name, dataset_config, is_production=
                     is_production=is_production)
 
     draw_confusion_matrix(cm,
-                          title=f'ConfusionMatrix-{train_config["train"]["model"].__name__}-{train_config["train"]["optimizer"]}',
+                          title=f'ConfusionMatrix-{model_name}-{train_config["train"]["optimizer"]}',
                           path=train_config["train"]['fig_path'])
