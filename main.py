@@ -12,7 +12,7 @@ from config import (default_program_config,
 def run_sweep(program_config, train_config, dataset_config):
     is_production = True
 
-    wandb.init(program_config['wandb']['project']) if is_production else None
+    wandb.init() if is_production else None
 
     model_name = program_config['model']
     for key, value in wandb.config.items():
@@ -59,7 +59,8 @@ def main():
     elif program_config['mode'] == 'sweep':
         sweep_config = default_sweep_config
         sweep_id = wandb.sweep(sweep_config['config'][program_config['model']],
-                               project=program_config['wandb']['project'])
+                               project=program_config['wandb']['project'],
+                               entity=program_config['wandb']['entity'])
         wandb.agent(sweep_id,
                     function=lambda: run_sweep(program_config,
                                                train_config,
