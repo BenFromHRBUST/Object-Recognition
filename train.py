@@ -115,7 +115,7 @@ def train(model_name, train_config, dataset_name, dataset_config, is_production=
 
     device = check_device()
 
-    model = getattr(models, model_name)().to(device)
+    model = getattr(models, model_name)(train_config).to(device)
 
     train_losses, train_accuracies, val_losses, val_accuracies = train_model(model,
                                                                              train_config,
