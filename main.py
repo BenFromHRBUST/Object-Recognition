@@ -61,7 +61,8 @@ def main():
         wandb.agent(sweep_id,
                     function=lambda: run_sweep(program_config,
                                                train_config,
-                                               dataset_config),
+                                               dataset_config,
+                                               is_production=program_config['production']),
                     count=sweep_config['count'])
 
 
