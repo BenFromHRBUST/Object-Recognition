@@ -1,3 +1,5 @@
+import time
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -77,10 +79,10 @@ def train_model(model, train_general_config, train_loader, val_loader, device='c
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy, "val_loss": val_loss,
                        "val_accuracy": val_accuracy}) if is_production else None
             print(
-                f'Epoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%, Val Loss: {val_loss:.5f}, Val Accuracy: {val_accuracy:.5f}%')
+                f'[!] {time.strftime("%Y-%m-%d %H:%M:%S")}: Epoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%, Val Loss: {val_loss:.5f}, Val Accuracy: {val_accuracy:.5f}%')
         else:
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy}) if is_production else None
-            print(f'Epoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
+            print(f'[!] {time.strftime("%Y-%m-%d %H:%M:%S")}: Epoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
 
     print(f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_general_config["epochs"]} epochs...DONE!')
     return train_losses, train_accuracies, val_losses, val_accuracies
@@ -107,7 +109,7 @@ def test_model(model, train_config, test_loader, device='cpu', is_production=Fal
 
     accuracy = total_correct / total_images * 100
     wandb.log({"Test Accuracy": accuracy}) if is_production else None
-    print(f'[!]Test Accuracy: {accuracy}%')
+    print(f'[!] {time.strftime("%Y-%m-%d %H:%M:%S")}: Test Accuracy: {accuracy}%')
 
     print(f'[+] Testing {model.__class__.__name__}...DONE!')
 
