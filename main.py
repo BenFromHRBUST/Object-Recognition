@@ -12,11 +12,10 @@ from config import (default_program_config,
 def run_sweep(program_config, train_config, dataset_config):
     is_production = True
 
-    wandb.init() if is_production else None
+    wandb.init(program_config['wandb']['project']) if is_production else None
 
     model_name = program_config['model']
     for key, value in wandb.config.items():
-        print("DEBUG: ", type(train_config['general']))
         if key in train_config['general'].keys():
             train_config['general'][key] = value
         elif key in train_config[model_name]:
