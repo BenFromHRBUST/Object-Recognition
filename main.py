@@ -1,27 +1,56 @@
+import copy
+
 import wandb
 
-from dataset.CIFAR100 import CIFAR100
-
 from train import train
-from utils import check_device
-from config import default_config
+from config import (default_program_config,
+                    default_train_config,
+                    default_dataset_config,
+                    default_sweep_config)
+
+
+def sweep(train_config, dataset, is_production=False):
+    wandb.init() if is_production else None
+
+    for key, value in wandb.config.items():
+        train_config[key] = value
+
+    wandb.finish() if is_production else None
 
 
 def main():
-    config = default_config
+    program_config = default_program_config
+    train_config = default_train_config
+    dataset_config = default_dataset_config
 
-    if config['wandb']['api_key'] == '':
-        config['production'] = False
+    if program_config['wandb']['api_key'] == '':
+        if program_config['mode'] == 'sweep':
+            raise ValueError("API key is required to run the code in sweep mode.")
+        else:
+            print("[!] API key is not provided. Running the code in develop mode...")
+            program_config['production'] = False
 
-    wandb.login(key=config['wandb']['api_key']) if config['production'] else None
+    wandb.login(key=program_config['wandb']['api_key']) if program_config['production'] else None
 
-    dataset = CIFAR100(config['cifar100'])
-    train_loader, val_loader, test_loader = dataset.get_loader()
-
-    train(config, train_loader, val_loader, test_loader, is_production=config['production'])
+    if program_config['mode'] == 'train':
+        wandb.init(program_config['wandb']['project']) if program_config['production'] else None
+        train(program_config['model'],
+              train_config[program_config['model']],
+              program_config['dataset'],
+              dataset_config[program_config['dataset']],
+              is_production=program_config['production'])
+        wandb.finish() if program_config['production'] else None
+    elif program_config['mode'] == 'sweep':
+        sweep_config = default_sweep_config
+        sweep_id = wandb.sweep(sweep_config['config'], project=program_config['wandb']['project'])
+        wandb.agent(sweep_id,
+                    function=lambda: sweep(train_config,
+                                           program_config['dataset'],
+                                           is_production=program_config['production']),
+                    count=sweep_config['count'])
 
 
 if __name__ == '__main__':
-    print("[!] main.py is running...")
+    print("[+] main.py is running...")
     main()
-    print("[!] main.py is done!")
+    print("[+] main.py is done!")

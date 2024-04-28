@@ -8,28 +8,30 @@ import wandb
 
 from tqdm import tqdm
 
+import models
+from dataset.CIFAR100 import CIFAR100
 from utils import (check_device,
                    plot_curves,
                    draw_confusion_matrix)
 
 
-def train_model(model, config, train_loader, val_loader, device='cpu', is_production=False):
+def train_model(model, train_config, train_loader, val_loader, device='cpu', is_production=False):
     print(
-        f'[!] Training {config["model"].__name__} with {config["optimizer"]} optimizer for {config["epochs"]} epochs...')
-    print(f'[!] Model Architecture: {model}')
+        f'[+] Training {model.__class__.__name__} with {train_config["optimizer"]} optimizer for {train_config["epochs"]} epochs...')
+    print(f'[+] Model Architecture: {model}')
 
     criterion = nn.CrossEntropyLoss()
-    optimizer_class = getattr(optim, config['optimizer'])
-    optimizer = optimizer_class(model.parameters(), lr=config['lr'], weight_decay=config['weight_decay'])
+    optimizer_class = getattr(optim, train_config['optimizer'])
+    optimizer = optimizer_class(model.parameters(), lr=train_config['learning_rate'], weight_decay=train_config['weight_decay'])
 
     model.train()
     train_losses, train_accuracies = [], []
     val_losses, val_accuracies = [], []
-    for epoch in range(config['epochs']):
+    for epoch in range(train_config['epochs']):
         running_loss = 0.0
         total_correct = 0
         total_images = 0
-        for images, labels in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{config["epochs"]}'):
+        for images, labels in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{train_config["epochs"]}'):
             images, labels = images.to(device), labels.to(device)
             optimizer.zero_grad()
             outputs = model(images)
@@ -75,12 +77,12 @@ def train_model(model, config, train_loader, val_loader, device='cpu', is_produc
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy}) if is_production else None
             print(f'\rEpoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
 
-    print(f'[!] Training {config["model"].__name__} with {config["optimizer"]} optimizer for {config["epochs"]} epochs...DONE!')
+    print(f'[+] Training {train_config["model"].__name__} with {train_config["optimizer"]} optimizer for {train_config["epochs"]} epochs...DONE!')
     return train_losses, train_accuracies, val_losses, val_accuracies
 
 
-def test_model(model,config, test_loader, device='cpu', is_production=False):
-    print(f'[!] Testing {config["model"].__name__}...')
+def test_model(model, train_config, test_loader, device='cpu', is_production=False):
+    print(f'[+] Testing {train_config["model"].__name__}...')
 
     model.eval()
     total_correct = 0
@@ -102,33 +104,36 @@ def test_model(model,config, test_loader, device='cpu', is_production=False):
     wandb.log({"Test Accuracy": accuracy}) if is_production else None
     print(f'Test Accuracy: {accuracy}%')
 
-    print(f'[!] Testing {config["model"].__name__}...DONE!')
+    print(f'[+] Testing {train_config["model"].__name__}...DONE!')
 
     return cm
 
 
-def train(config, train_loader, val_loader, test_loader, is_production=False):
-    wandb.init(config['wandb']['project']) if is_production else None
+def train(model_name, train_config, dataset_name, dataset_config, is_production=False):
+    dataset = eval(dataset_name)(dataset_config)
+    train_loader, val_loader, test_loader = dataset.get_loader(train_config['batch_size'])
 
     device = check_device()
 
-    model = config['train']['model']().to(device)
+    model = getattr(models, model_name)().to(device)
 
-    train_losses, train_accuracies, val_losses, val_accuracies = train_model(model, config['train'],
-                                                                             train_loader, val_loader,
+    train_losses, train_accuracies, val_losses, val_accuracies = train_model(model,
+                                                                             train_config,
+                                                                             train_loader,
+                                                                             val_loader,
                                                                              device=device,
                                                                              is_production=is_production)
 
     plot_curves(train_losses, train_accuracies, val_losses, val_accuracies,
-                title=f'{config["train"]["model"].__name__}-{config["train"]["optimizer"]}',
-                path=config["train"]['fig_path'])
+                title=f'{train_config["train"]["model"].__name__}-{train_config["train"]["optimizer"]}',
+                path=train_config["train"]['fig_path'])
 
     cm = test_model(model,
-                    config,
+                    train_config,
                     test_loader,
                     device=device,
                     is_production=is_production)
 
     draw_confusion_matrix(cm,
-                          title=f'ConfusionMatrix-{config["train"]["model"].__name__}-{config["train"]["optimizer"]}',
-                          path=config["train"]['fig_path'])
+                          title=f'ConfusionMatrix-{train_config["train"]["model"].__name__}-{train_config["train"]["optimizer"]}',
+                          path=train_config["train"]['fig_path'])

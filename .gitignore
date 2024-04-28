@@ -4,3 +4,5 @@ wandb
 config.py
 
 .idea
+
+test.*
