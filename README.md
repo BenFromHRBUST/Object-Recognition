@@ -1,18 +1,15 @@
 # Object Recognition
 
 ## Contents
-- [Introduction](#introduction)
+- [Introduction](#Introduction)
 - [How to use](#How-to-use)
-- [How to fine tune the model](#How-to-fine-tune-the-model)
 - [Version Management](#version-management)
 - [Authors](#Authors)
 - [Copyright](#Copyright)
 
 ### Introduction
 
-*The introduction is on the way~*
-
-[//]: # (TODO: Write a project description)
+This is a project for object recognition.
 
 ### How to use
 
@@ -39,18 +36,16 @@ cp config.template.py config.py
 vim config.py
 ```
 
-If you want to use wandb, you need to set the `api_key` in the config.py file. It will only be used when you set the `production` to True.
+For more details, please see the `config.template.py` file in the repository.
+
+**Notice**:
+- If you want to use wandb, you need to set the `WANDB_API_KEY` and `WANDB_ENTITY` in `default_program_config`. It will only be used when you set the `production` to `True`.
+- If you want to use sweep in wandb, you need to set the `production` to True in `default_program_config`. The sweep mode is only available when the `production` is set to `True`.
 
 #### Run the project
 ```bash
 python main.py
 ```
-
-### How to fine tune the model
-
-*The guide is on the way~*
-
-[//]: # (TODO: Add description)
 
 ### version management
 
