@@ -18,11 +18,14 @@ from utils import (check_device,
 def train_model(model, train_general_config, train_loader, val_loader, device='cpu', is_production=False):
     print(
         f'[+] Training {model.__class__.__name__} with {train_general_config["optimizer"]} optimizer for {train_general_config["epochs"]} epochs...')
-    print(f'[+] Model Architecture: {model}')
 
     criterion = nn.CrossEntropyLoss()
     optimizer_class = getattr(optim, train_general_config['optimizer'])
     optimizer = optimizer_class(model.parameters(), lr=train_general_config['learning_rate'], weight_decay=train_general_config['weight_decay'])
+
+    print(f'[+] Model Architecture: {model}')
+    print(f'[+] Optimizer: {optimizer}')
+    print(f'[+] Criterion: {criterion}')
 
     model.train()
     train_losses, train_accuracies = [], []
