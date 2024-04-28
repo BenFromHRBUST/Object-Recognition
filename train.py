@@ -34,7 +34,7 @@ def train_model(model, train_general_config, train_loader, val_loader, device='c
         running_loss = 0.0
         total_correct = 0
         total_images = 0
-        for images, labels in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{train_general_config["epochs"]}\r'):
+        for images, labels in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{train_general_config["epochs"]}'):
             images, labels = images.to(device), labels.to(device)
             optimizer.zero_grad()
             outputs = model(images)
