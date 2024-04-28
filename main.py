@@ -9,15 +9,18 @@ from config import (default_program_config,
                     default_sweep_config)
 
 
-def run_sweep(program_config, train_config, dataset_config, is_production=False):
+def run_sweep(program_config, train_config, dataset_config):
+    is_production = True
+
     wandb.init() if is_production else None
 
     model_name = program_config['model']
     for key, value in wandb.config.items():
+        print("DEBUG: ", type(train_config['general']))
         if key in train_config['general'].keys():
-            train_config['general'] = value
+            train_config['general'][key] = value
         elif key in train_config[model_name]:
-            train_config[model_name] = value
+            train_config[model_name][key] = value
 
     train(program_config['model'],
           train_config['general'],
@@ -61,8 +64,7 @@ def main():
         wandb.agent(sweep_id,
                     function=lambda: run_sweep(program_config,
                                                train_config,
-                                               dataset_config,
-                                               is_production=program_config['production']),
+                                               dataset_config),
                     count=sweep_config['count'])
 
 
