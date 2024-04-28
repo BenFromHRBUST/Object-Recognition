@@ -10,11 +10,11 @@ WANDB_ENTITY = 'bugmakerh'  # Your entity name. You can find it in the URL of yo
 default_program_config = {
     'production': True,  # [True, False]. Set this to 'True' if you want to run the code in production mode. But it must be 'True' when you run the code in sweep mode.
     'mode': 'sweep',    # ['train', 'sweep']. 'train' is for training a single model, and 'sweep' is for hyperparameter tuning.
-    'model': 'ImprovedCNN',  # ['SimpleCNN', 'ImprovedCNN'].
+    'model': 'EnhancedCNN',  # ['SimpleCNN', 'EnhancedCNN', 'ImprovedCNN'].
     'dataset': 'CIFAR100',  # ['CIFAR100']
     'wandb': {
         'api_key': WANDB_API_KEY,
-        'project': 'ObjectRecognition',   # Your project name in wandb
+        'project': 'ObjectionRecognition',   # Your project name in wandb
         'entity': WANDB_ENTITY,
     },
 }
@@ -27,7 +27,7 @@ default_program_config = {
 default_train_config = {
     # General configurations
     'general': {
-        'epochs': 200,  # Number of epochs
+        'epochs': 2,  # Number of epochs
         'optimizer': 'Adam',    # Optimizer to use. For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
         'batch_size': 256,  # Batch size
         'learning_rate': 0.001,   # Learning rate
@@ -36,6 +36,10 @@ default_train_config = {
     },
     # Model-specific configurations
     'SimpleCNN': {
+        'activation_function': 'LeakyReLU', # Activation function to use. For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
+    },
+    'EnhancedCNN': {
+        'dropout_rate': 0.5,    # Dropout rate
         'activation_function': 'LeakyReLU', # Activation function to use. For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
     },
     'ImprovedCNN': {
@@ -76,7 +80,7 @@ default_dataset_config = {
 
 # Default sweep configurations
 default_sweep_config = {
-    'count': 3,     # Number of runs
+    'count': 500,     # Number of runs
     'config': {
         # Model-specific configurations
         'SimpleCNN': {
@@ -103,6 +107,35 @@ default_sweep_config = {
                 'activation_function': {
                     'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
                 },
+            }
+        },
+        'EnhancedCNN': {
+            'method': 'bayes',
+            'metric': {
+                'name': 'val_accuracy',
+                'goal': 'maximize'
+            },
+            'parameters': {
+                'learning_rate': {
+                    'min': 1e-4,
+                    'max': 1e-2
+                },
+                'batch_size': {
+                    'values': [64, 128, 256]
+                },
+                'epochs': {
+                    'value': 200
+                },
+                'optimizer': {
+                    'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
+                },
+                'activation_function': {
+                    'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
+                },
+                'dropout_rate': {
+                    'min': 0.0,
+                    'max': 0.5
+                }
             }
         },
         'ImprovedCNN': {
