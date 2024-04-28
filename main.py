@@ -35,6 +35,7 @@ def main():
     if program_config['mode'] == 'train':
         wandb.init(program_config['wandb']['project']) if program_config['production'] else None
         train(program_config['model'],
+              train_config['general'],
               train_config[program_config['model']],
               program_config['dataset'],
               dataset_config[program_config['dataset']],
