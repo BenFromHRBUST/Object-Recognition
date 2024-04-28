@@ -77,12 +77,12 @@ def train_model(model, train_config, train_loader, val_loader, device='cpu', is_
             wandb.log({"epoch": epoch + 1, "train_loss": train_loss, "train_accuracy": train_accuracy}) if is_production else None
             print(f'\rEpoch {epoch + 1}, Train Loss: {train_loss:.5f}, Train Accuracy: {train_accuracy:.5f}%')
 
-    print(f'[+] Training {train_config["model"].__name__} with {train_config["optimizer"]} optimizer for {train_config["epochs"]} epochs...DONE!')
+    print(f'[+] Training {model.__class__.__name__} with {train_config["optimizer"]} optimizer for {train_config["epochs"]} epochs...DONE!')
     return train_losses, train_accuracies, val_losses, val_accuracies
 
 
 def test_model(model, train_config, test_loader, device='cpu', is_production=False):
-    print(f'[+] Testing {train_config["model"].__name__}...')
+    print(f'[+] Testing {model.__class__.__name__}...')
 
     model.eval()
     total_correct = 0
@@ -104,7 +104,7 @@ def test_model(model, train_config, test_loader, device='cpu', is_production=Fal
     wandb.log({"Test Accuracy": accuracy}) if is_production else None
     print(f'Test Accuracy: {accuracy}%')
 
-    print(f'[+] Testing {train_config["model"].__name__}...DONE!')
+    print(f'[+] Testing {model.__class__.__name__}...DONE!')
 
     return cm
 
