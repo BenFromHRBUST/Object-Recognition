@@ -1,12 +1,10 @@
 import torch
 import torch.nn as nn
-import torchvision.transforms as transforms
 
 
 class SimpleAlexNet(nn.Module):
     def __init__(self, train_config, num_classes=100):
         super(SimpleAlexNet, self).__init__()
-        self.resize = transforms.Resize((244, 244))
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
             getattr(nn, train_config['activation_function'])(),
@@ -34,7 +32,6 @@ class SimpleAlexNet(nn.Module):
         )
 
     def forward(self, x):
-        x = self.resize(x)  # Resize the input image
         x = self.features(x)
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
