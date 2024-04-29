@@ -6,10 +6,10 @@ class SimpleAlexNet(nn.Module):
     def __init__(self, train_config, num_classes=100):
         super(SimpleAlexNet, self).__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
+            nn.Conv2d(3, 64, kernel_size=5, stride=1, padding=2),
             getattr(nn, train_config['activation_function'])(),
             nn.MaxPool2d(kernel_size=3, stride=2),
-            nn.Conv2d(64, 192, kernel_size=5, padding=2),
+            nn.Conv2d(64, 192, kernel_size=3, padding=2),
             getattr(nn, train_config['activation_function'])(),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.Conv2d(192, 384, kernel_size=3, padding=1),

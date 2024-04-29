@@ -31,8 +31,8 @@ def run_sweep(program_config, train_config, dataset_config):
 
 def main():
     program_config = default_program_config
-    train_config = default_train_config
     dataset_config = default_dataset_config
+    train_config = default_train_config
 
     if program_config['wandb']['api_key'] == '' and program_config['mode'] == 'sweep':
         raise ValueError("API key is required to run the code in sweep mode.")
