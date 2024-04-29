@@ -1,5 +1,6 @@
 from torch.utils.data import DataLoader, random_split
 
+from .CIFAR10 import CIFAR10
 from .CIFAR100 import CIFAR100
 
 

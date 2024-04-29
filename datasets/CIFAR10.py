@@ -3,7 +3,7 @@ from torchvision import datasets
 from .utils import dataset_transform
 
 
-class CIFAR100:
+class CIFAR10:
     def __init__(self, dataset_config):
         self.dataset_config = dataset_config
 
@@ -16,11 +16,11 @@ class CIFAR100:
 
     def _download(self):
         print("[+] Downloading and transforming CIFAR-100 dataset...")
-        train_dataset = datasets.CIFAR100(root=self.dataset_config['general']['root'],
+        train_dataset = datasets.CIFAR10(root=self.dataset_config['general']['root'],
                                           train=True,
                                           download=True,
                                           transform=dataset_transform(config=self.dataset_config['datasets']['train']['augmentation']))
-        test_dataset = datasets.CIFAR100(root=self.dataset_config['general']['root'],
+        test_dataset = datasets.CIFAR10(root=self.dataset_config['general']['root'],
                                          train=False,
                                          download=True,
                                          transform=dataset_transform())
