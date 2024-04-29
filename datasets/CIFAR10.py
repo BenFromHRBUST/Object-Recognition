@@ -15,7 +15,7 @@ class CIFAR10:
         return self.train_dataset, self.test_dataset
 
     def _download(self):
-        print("[+] Downloading and transforming CIFAR-100 dataset...")
+        print("[+] Downloading and transforming CIFAR-10 dataset...")
         train_dataset = datasets.CIFAR10(root=self.dataset_config['general']['root'],
                                           train=True,
                                           download=True,
@@ -25,6 +25,6 @@ class CIFAR10:
                                          download=True,
                                          transform=dataset_transform())
         self.is_downloaded = True
-        print("[+] Downloading and transforming CIFAR-100 dataset...DONE!")
+        print("[+] Downloading and transforming CIFAR-10 dataset...DONE!")
 
         return train_dataset, test_dataset
