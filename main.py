@@ -1,5 +1,3 @@
-import copy
-
 import wandb
 
 from train import train
