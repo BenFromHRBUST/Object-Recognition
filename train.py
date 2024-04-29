@@ -11,7 +11,7 @@ import wandb
 from tqdm import tqdm
 
 import models
-from dataset.CIFAR100 import CIFAR100
+from datasets import Datasets
 from utils import (check_device,
                    plot_curves,
                    draw_confusion_matrix)
@@ -117,7 +117,7 @@ def test_model(model, train_config, test_loader, device='cpu', is_production=Fal
 
 
 def train(model_name, train_general_config, train_model_config, dataset_name, dataset_config, is_production=False):
-    dataset = eval(dataset_name)(dataset_config)
+    dataset = Datasets(dataset_name, dataset_config)
     train_loader, val_loader, test_loader = dataset.get_loader(train_general_config['batch_size'])
 
     device = check_device()
