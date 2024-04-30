@@ -7,7 +7,7 @@ class CIFAR10:
     def __init__(self, dataset_config):
         self.dataset_config = dataset_config
 
-        self.is_downloaded = False     # False when it is first time to run the code, then it will be True
+        self.is_downloaded = False  # False when it is first time to run the code, then it will be True
         if not self.is_downloaded:
             self.train_dataset, self.test_dataset = self._download()
 
@@ -17,13 +17,19 @@ class CIFAR10:
     def _download(self):
         print("[+] Downloading and transforming CIFAR-10 dataset...")
         train_dataset = datasets.CIFAR10(root=self.dataset_config['general']['root'],
-                                          train=True,
-                                          download=True,
-                                          transform=dataset_transform(config=self.dataset_config['datasets']['train']['augmentation']))
-        test_dataset = datasets.CIFAR10(root=self.dataset_config['general']['root'],
-                                         train=False,
+                                         train=True,
                                          download=True,
-                                         transform=dataset_transform())
+                                         transform=dataset_transform(config_general=self.dataset_config['general'],
+                                                                     config_augmentation=
+                                                                     self.dataset_config['datasets']['train'][
+                                                                         'augmentation']))
+        test_dataset = datasets.CIFAR10(root=self.dataset_config['general']['root'],
+                                        train=False,
+                                        download=True,
+                                        transform=dataset_transform(config_general=self.dataset_config['general'],
+                                                                    config_augmentation=
+                                                                    self.dataset_config['datasets']['test'][
+                                                                        'augmentation']))
         self.is_downloaded = True
         print("[+] Downloading and transforming CIFAR-10 dataset...DONE!")
 

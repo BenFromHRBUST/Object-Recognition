@@ -1,11 +1,16 @@
 from torchvision import transforms
 
 
-def dataset_transform(config={}):
+def dataset_transform(config_general, config_augmentation={}):
     transform_list = []
-    if ('flip' in config) and config['flip']:
+
+    if 'resize' in config_general:
+        transform_list.append(transforms.Resize((config_general['resize'], config_general['resize'])))
+
+    if ('flip' in config_augmentation) and config_augmentation['flip']:
         transform_list.append(transforms.RandomHorizontalFlip())
-    if ('crop' in config) and config['crop']:
+
+    if ('crop' in config_augmentation) and config_augmentation['crop']:
         transform_list.append(transforms.RandomCrop(32, padding=4))
 
     transform_list.append(transforms.ToTensor())

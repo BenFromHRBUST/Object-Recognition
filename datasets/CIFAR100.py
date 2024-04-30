@@ -17,13 +17,19 @@ class CIFAR100:
     def _download(self):
         print("[+] Downloading and transforming CIFAR-100 dataset...")
         train_dataset = datasets.CIFAR100(root=self.dataset_config['general']['root'],
-                                          train=True,
-                                          download=True,
-                                          transform=dataset_transform(config=self.dataset_config['datasets']['train']['augmentation']))
-        test_dataset = datasets.CIFAR100(root=self.dataset_config['general']['root'],
-                                         train=False,
+                                         train=True,
                                          download=True,
-                                         transform=dataset_transform())
+                                         transform=dataset_transform(config_general=self.dataset_config['general'],
+                                                                     config_augmentation=
+                                                                     self.dataset_config['datasets']['train'][
+                                                                         'augmentation']))
+        test_dataset = datasets.CIFAR100(root=self.dataset_config['general']['root'],
+                                        train=False,
+                                        download=True,
+                                        transform=dataset_transform(config_general=self.dataset_config['general'],
+                                                                    config_augmentation=
+                                                                    self.dataset_config['datasets']['test'][
+                                                                        'augmentation']))
         self.is_downloaded = True
         print("[+] Downloading and transforming CIFAR-100 dataset...DONE!")
 
