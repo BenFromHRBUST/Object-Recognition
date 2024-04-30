@@ -10,8 +10,8 @@ WANDB_ENTITY = 'bugmakerh'  # Your entity name. You can find it in the URL of yo
 default_program_config = {
     'production': True,  # [True, False]. Set this to 'True' if you want to run the code in production mode. But it must be 'True' when you run the code in sweep mode.
     'mode': 'sweep',    # ['train', 'sweep']. 'train' is for training a single model, and 'sweep' is for hyperparameter tuning.
-    'model': 'ResidualCNN',  # ['SimpleCNN', 'EnhancedCNN', 'ImprovedCNN', 'InceptionLikeCNN', 'ResidualCNN'].
-    'dataset': 'CIFAR100',  # ['CIFAR100']
+    'model': 'SimpleCNN',  # ['SimpleCNN', 'EnhancedCNN', 'ImprovedCNN', 'InceptionLikeCNN', 'ResidualCNN', 'SimpleAlexNet'].
+    'dataset': 'CIFAR10',  # ['CIFAR10', 'CIFAR100']
     'wandb': {
         'api_key': WANDB_API_KEY,
         'project': 'Test',   # Your project name in wandb
@@ -27,8 +27,8 @@ default_program_config = {
 default_train_config = {
     # General configurations
     'general': {
-        'epochs': 2,  # Number of epochs
-        'optimizer': 'Adam',    # Optimizer to use. For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
+        'epochs': 200,  # Number of epochs
+        'optimizer': 'SGD',    # Optimizer to use. For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
         'batch_size': 256,  # Batch size
         'learning_rate': 0.001,   # Learning rate
         'weight_decay': 0.001,  # Weight decay
@@ -52,12 +52,49 @@ default_train_config = {
     'ResidualCNN': {
         'activation_function': 'LeakyReLU', # Activation function to use. For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
     },
+    'SimpleAlexNet': {
+        'activation_function': 'LeakyReLU',
+    }
 }
 
 # Default dataset configurations
 default_dataset_config = {
+    'CIFAR10': {
+        'general': {
+            'root': './tmp_dataset',    # Path to save the dataset
+            'resize': (224, 224),   # Resize the image to fit the model
+            'num_workers': 8,   # Number of workers
+        },
+        'datasets': {
+            # Training dataset configurations
+            'train': {
+                'shuffle': True,    # Shuffle the dataset
+                'num_workers': 8,   # Number of workers
+                # Data augmentation
+                'augmentation': {
+                    'flip': False,   # Randomly flip the image horizontally
+                    'crop': False,   # Randomly crop the image
+                },
+            },
+            # Validation dataset configurations
+            'val': {
+                'ratio': 0.2,  # Validation ratio. 0.2 means 20% of the training dataset will be used for validation.
+                'shuffle': False,   # Shuffle the dataset
+            },
+            # Test dataset configurations
+            'test': {
+                'shuffle': False,   # Shuffle the dataset
+                'num_workers': 8,   # Number of workers
+                'augmentation': {
+                },
+            },
+        },
+    },
     'CIFAR100': {
-        'root': './tmp_dataset',    # Path to save the dataset
+        'general': {
+            'root': './tmp_dataset',    # Path to save the dataset
+            'num_workers': 8,   # Number of workers
+        },
         'datasets': {
             # Training dataset configurations
             'train': {
@@ -73,7 +110,6 @@ default_dataset_config = {
             'val': {
                 'ratio': 0.2,  # Validation ratio. 0.2 means 20% of the training dataset will be used for validation.
                 'shuffle': False,   # Shuffle the dataset
-                'num_workers': 8,   # Number of workers
             },
             # Test dataset configurations
             'test': {
@@ -86,7 +122,7 @@ default_dataset_config = {
 
 # Default sweep configurations
 default_sweep_config = {
-    'count': 1,     # Number of runs
+    'count': 50,     # Number of runs
     'config': {
         # Model-specific configurations
         'SimpleCNN': {
@@ -105,7 +141,7 @@ default_sweep_config = {
                     'values': [64, 128, 256]
                 },
                 'epochs': {
-                    'value': 200
+                    'value': 100
                 },
                 'optimizer': {
                     'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
@@ -130,7 +166,7 @@ default_sweep_config = {
                     'values': [64, 128, 256]
                 },
                 'epochs': {
-                    'value': 200
+                    'value': 100
                 },
                 'optimizer': {
                     'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
@@ -159,7 +195,7 @@ default_sweep_config = {
                     'values': [64, 128, 256]
                 },
                 'epochs': {
-                    'value': 200
+                    'value': 100
                 },
                 'optimizer': {
                     'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
@@ -188,7 +224,7 @@ default_sweep_config = {
                     'values': [64, 128, 256]
                 },
                 'epochs': {
-                    'value': 200
+                    'value': 100
                 },
                 'optimizer': {
                     'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
@@ -213,7 +249,7 @@ default_sweep_config = {
                     'values': [64, 128, 256]
                 },
                 'epochs': {
-                    'value': 1
+                    'value': 100
                 },
                 'optimizer': {
                     'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
@@ -222,6 +258,31 @@ default_sweep_config = {
                     'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
                 },
             }
-        }
+        },
+        'SimpleAlexNet': {
+            'method': 'bayes',
+            'metric': {
+                'name': 'val_accuracy',
+                'goal': 'maximize'
+            },
+            'parameters': {
+                'learning_rate': {
+                    'min': 1e-4,
+                    'max': 1e-2
+                },
+                'batch_size': {
+                    'values': [64, 128, 256]
+                },
+                'epochs': {
+                    'value': 100
+                },
+                'optimizer': {
+                    'values': ['Adam', 'SGD']   # For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
+                },
+                'activation_function': {
+                    'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
+                },
+            }
+        },
     }
 }
