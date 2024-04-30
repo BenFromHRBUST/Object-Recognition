@@ -5,7 +5,7 @@ def dataset_transform(config_general, config_augmentation={}):
     transform_list = []
 
     if 'resize' in config_general:
-        transform_list.append(transforms.Resize((config_general['resize'], config_general['resize'])))
+        transform_list.append(transforms.Resize(config_general['resize'], config_general['resize']))
 
     if ('flip' in config_augmentation) and config_augmentation['flip']:
         transform_list.append(transforms.RandomHorizontalFlip())
