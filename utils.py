@@ -82,3 +82,23 @@ def draw_confusion_matrix(cm, title='Confusion Matrix', path='./fig'):
     plt.title(title)
     plt.savefig(os.path.join(path, '{}.png'.format(title)))
     plt.show()
+
+
+def optimizer_params_filter(optimizer_name, params):
+    valid_params = {
+        'Adadelta': ['lr', 'rho', 'eps', 'weight_decay'],
+        'Adagrad': ['lr', 'lr_decay', 'weight_decay', 'initial_accumulator_value', 'eps'],
+        'Adam': ['lr', 'betas', 'eps', 'weight_decay', 'amsgrad'],
+        'AdamW': ['lr', 'betas', 'eps', 'weight_decay', 'amsgrad'],
+        'SparseAdam': ['lr', 'betas', 'eps'],
+        'Adamax': ['lr', 'betas', 'eps', 'weight_decay'],
+        'ASGD': ['lr', 'lambd', 'alpha', 't0', 'weight_decay'],
+        'LBFGS': ['lr', 'max_iter', 'max_eval', 'tolerance_grad', 'tolerance_change', 'history_size', 'line_search_fn'],
+        'NAdam': ['lr', 'betas', 'eps', 'weight_decay'],
+        'RAdam': ['lr', 'betas', 'eps', 'weight_decay'],
+        'RMSprop': ['lr', 'alpha', 'eps', 'weight_decay', 'momentum', 'centered'],
+        'Rprop': ['lr'],
+        'SGD': ['lr', 'momentum', 'dampening', 'weight_decay', 'nesterov'],
+    }
+    filtered_params = {k: v for k, v in params.items() if k in valid_params[optimizer_name]}
+    return filtered_params

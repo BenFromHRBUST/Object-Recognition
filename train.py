@@ -14,7 +14,8 @@ import models
 from datasets import Datasets
 from utils import (check_device,
                    plot_curves,
-                   draw_confusion_matrix)
+                   draw_confusion_matrix,
+                   optimizer_params_filter)
 
 
 def train_model(model, train_general_config, train_loader, val_loader, device='cpu', is_production=False):
@@ -24,8 +25,7 @@ def train_model(model, train_general_config, train_loader, val_loader, device='c
     criterion = nn.CrossEntropyLoss()
     optimizer_class = getattr(optim, train_general_config['optimizer'])
     optimizer = optimizer_class(model.parameters(),
-                                lr=train_general_config['learning_rate'],
-                                weight_decay=train_general_config['weight_decay'])
+                                **(optimizer_params_filter(train_general_config['optimizer'], train_general_config)))
 
     print(f'[+] Model Architecture: {model}')
     print(f'[+] Optimizer: {optimizer}')

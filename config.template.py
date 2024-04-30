@@ -9,7 +9,7 @@ WANDB_ENTITY = 'bugmakerh'  # Your entity name. You can find it in the URL of yo
 # Default program configurations
 default_program_config = {
     'production': True,  # [True, False]. Set this to 'True' if you want to run the code in production mode. But it must be 'True' when you run the code in sweep mode.
-    'mode': 'sweep',    # ['train', 'sweep']. 'train' is for training a single model, and 'sweep' is for hyperparameter tuning.
+    'mode': 'train',    # ['train', 'sweep']. 'train' is for training a single model, and 'sweep' is for hyperparameter tuning.
     'model': 'SimpleCNN',  # ['SimpleCNN', 'EnhancedCNN', 'ImprovedCNN', 'InceptionLikeCNN', 'ResidualCNN', 'SimpleAlexNet'].
     'dataset': 'CIFAR10',  # ['CIFAR10', 'CIFAR100']
     'wandb': {
@@ -28,10 +28,11 @@ default_train_config = {
     # General configurations
     'general': {
         'epochs': 200,  # Number of epochs
-        'optimizer': 'SGD',    # Optimizer to use. For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
+        'optimizer': 'Adam',    # Optimizer to use. For more optimizers, you can check the 'torch.optim' module from https://pytorch.org/docs/stable/optim.html#algorithms.
         'batch_size': 256,  # Batch size
-        'learning_rate': 0.001,   # Learning rate
+        'lr': 0.001,   # Learning rate
         'weight_decay': 0.001,  # Weight decay
+        'momentum': 0.9,    # Momentum
         'fig_path': './fig',    # Path to save the figures
     },
     # Model-specific configurations
@@ -61,8 +62,8 @@ default_train_config = {
 default_dataset_config = {
     'CIFAR10': {
         'general': {
-            'root': './tmp_dataset',    # Path to save the dataset
-            'resize': (224, 224),   # Resize the image to fit the model
+            'root': './dataset',    # Path to save the dataset
+            'resize': (32, 32),   # Resize the image to fit the model
             'num_workers': 8,   # Number of workers
         },
         'datasets': {
@@ -86,6 +87,7 @@ default_dataset_config = {
                 'shuffle': False,   # Shuffle the dataset
                 'num_workers': 8,   # Number of workers
                 'augmentation': {
+
                 },
             },
         },
@@ -122,7 +124,7 @@ default_dataset_config = {
 
 # Default sweep configurations
 default_sweep_config = {
-    'count': 50,     # Number of runs
+    'count': 100,     # Number of runs
     'config': {
         # Model-specific configurations
         'SimpleCNN': {
@@ -133,9 +135,9 @@ default_sweep_config = {
             },
             # Hyperparameters to tune
             'parameters': {
-                'learning_rate': {
+                '': {
                     'min': 1e-4,    # Minimum value
-                    'max': 1e-2    # Maximum value
+                    'max': 1e-1    # Maximum value
                 },
                 'batch_size': {
                     'values': [64, 128, 256]
@@ -149,6 +151,10 @@ default_sweep_config = {
                 'activation_function': {
                     'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
                 },
+                'weight_decay': {
+                    'min': 0.0,
+                    'max': 1e-2
+                },
             }
         },
         'EnhancedCNN': {
@@ -158,9 +164,9 @@ default_sweep_config = {
                 'goal': 'maximize'
             },
             'parameters': {
-                'learning_rate': {
+                '': {
                     'min': 1e-4,
-                    'max': 1e-2
+                    'max': 1e-1
                 },
                 'batch_size': {
                     'values': [64, 128, 256]
@@ -177,7 +183,11 @@ default_sweep_config = {
                 'dropout_rate': {
                     'min': 0.0,
                     'max': 0.5
-                }
+                },
+                'weight_decay': {
+                    'min': 0.0,
+                    'max': 1e-2
+                },
             }
         },
         'ImprovedCNN': {
@@ -187,9 +197,9 @@ default_sweep_config = {
                 'goal': 'maximize'
             },
             'parameters': {
-                'learning_rate': {
+                '': {
                     'min': 1e-4,
-                    'max': 1e-2
+                    'max': 1e-1
                 },
                 'batch_size': {
                     'values': [64, 128, 256]
@@ -206,7 +216,11 @@ default_sweep_config = {
                 'dropout_rate': {
                     'min': 0.0,
                     'max': 0.5
-                }
+                },
+                'weight_decay': {
+                    'min': 0.0,
+                    'max': 1e-2
+                },
             }
         },
         'InceptionLikeCNN': {
@@ -216,9 +230,9 @@ default_sweep_config = {
                 'goal': 'maximize'
             },
             'parameters': {
-                'learning_rate': {
+                '': {
                     'min': 1e-4,
-                    'max': 1e-2
+                    'max': 1e-1
                 },
                 'batch_size': {
                     'values': [64, 128, 256]
@@ -231,6 +245,10 @@ default_sweep_config = {
                 },
                 'activation_function': {
                     'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
+                },
+                'weight_decay': {
+                    'min': 0.0,
+                    'max': 1e-2
                 },
             }
         },
@@ -241,9 +259,9 @@ default_sweep_config = {
                 'goal': 'maximize'
             },
             'parameters': {
-                'learning_rate': {
+                '': {
                     'min': 1e-4,
-                    'max': 1e-2
+                    'max': 1e-1
                 },
                 'batch_size': {
                     'values': [64, 128, 256]
@@ -256,6 +274,10 @@ default_sweep_config = {
                 },
                 'activation_function': {
                     'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
+                },
+                'weight_decay': {
+                    'min': 0.0,
+                    'max': 1e-2
                 },
             }
         },
@@ -266,9 +288,9 @@ default_sweep_config = {
                 'goal': 'maximize'
             },
             'parameters': {
-                'learning_rate': {
+                '': {
                     'min': 1e-4,
-                    'max': 1e-2
+                    'max': 1e-1
                 },
                 'batch_size': {
                     'values': [64, 128, 256]
@@ -281,6 +303,10 @@ default_sweep_config = {
                 },
                 'activation_function': {
                     'values': ['ReLU', 'LeakyReLU']   # For more activation functions, you can check the 'torch.nn' module from https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity.
+                },
+                'weight_decay': {
+                    'min': 0.0,
+                    'max': 1e-2
                 },
             }
         },
