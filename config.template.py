@@ -308,6 +308,10 @@ default_sweep_config = {
                     'min': 0.0,
                     'max': 1e-2
                 },
+                'momentum': {
+                    'min': 0.0,
+                    'max': 1.0
+                },
             }
         },
     }
